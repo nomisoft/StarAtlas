@@ -15,7 +15,7 @@ class PlanetTest extends \PHPUnit_Framework_TestCase
     protected function setup()
     {
         $time = new Time("1988-11-22 0:00:00");
-        $location = new Location(0, 0);
+        $location = new Location(51.666666, 0);
         $earth = new Earth($time, $location);
         $this->planet = new Planet($time, $location, $earth);
         $this->planet->setId(1);

@@ -8,13 +8,31 @@ use StarAtlas\Models\Location;
 class CelestialObjectTest extends \PHPUnit_Framework_TestCase
 {
 
-    /*
-    public function testBringWithinRange() {
-        $time = new Time("1980-07-27 12:00:00");
-        $location = new Location(51.666666, 0);
-        $co = $this->getMockForAbstractClass('StarAtlas\Models\CelestialObject',array($time,$location));
+    /**
+     * @dataProvider providerRanges
+     */
+    public function testBringWithinRange($num, $range, $expectedResult)
+    {
+        $time = new Time();
+        $location = new Location(0, 0);
+        $celestialObject = $this->getMockForAbstractClass('StarAtlas\Models\CelestialObject', array($time, $location));
 
-        $this->assertEquals(40, $co->bringWithinRange(400,0,360,360), '', 1.0);
+        $reflection = new \ReflectionClass(get_class($celestialObject));
+        $method = $reflection->getMethod('bringWithinRange');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($celestialObject, array($num, $range));
+
+        $this->assertEquals($expectedResult, $result, '', 1.0);
     }
-    */
+
+    public function providerRanges()
+    {
+        return array(
+            array(400, 360, 40),
+            array(800, 360, 80),
+            array(-40, 360, 320),
+            array(0, 360, 0),
+            array(140, 100, 40),
+        );
+    }
 }

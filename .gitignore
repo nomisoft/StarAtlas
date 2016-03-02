@@ -1,5 +1,5 @@
 app/config.yml
-phpunit.xml
+phpunit.xml.dist
 vendor/
 .idea/
 app/Tests/coverage
