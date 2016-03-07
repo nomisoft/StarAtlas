@@ -10,14 +10,14 @@ Clone the repository to your chosen folder. Run "composer install". Import the d
 
 ## Routes
 
-*_/planets_* - Get a full listing of planets
-*_/planets/Mercury_* - Get details of a particular planet by its name
-*_/stars_* - Get a full listing of stars
-*_/stars/32349_* - Get details of a particular star by its Hipparcos catalogue number
-*_/moon_* - Get details about the Moon
+**_/planets_** - Get a full listing of planets
+**_/planets/Mercury_** - Get details of a particular planet by its name
+**_/stars_** - Get a full listing of stars
+**_/stars/32349_** - Get details of a particular star by its Hipparcos catalogue number
+**_/moon_** - Get details about the Moon
 
 ## Credits
 
 All formulas are derived from:
-Duffett-Smith, Peter (1988), Practical Astronomy with your Calculator 3rd Edition, Cambridge University Press
-Meeus, Jean (1991), Astronomical Algorithms, Willmann-Bell Inc
+_Duffett-Smith, Peter (1988), Practical Astronomy with your Calculator 3rd Edition, Cambridge University Press_
+_Meeus, Jean (1991), Astronomical Algorithms, Willmann-Bell Inc_
