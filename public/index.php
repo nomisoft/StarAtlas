@@ -12,6 +12,8 @@ $routes = array(
     array('^/planets/([A-Za-z]+)/?$','planet'),
     array('^/stars/?$','stars'),
     array('^/stars/([0-9]+)/?$','star'),
+    array('^/moon/?$','moon'),
+    array('^/sun/?$','sun'),
 );
 
 $app->addRoutes($routes);

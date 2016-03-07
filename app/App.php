@@ -28,18 +28,6 @@ class App
      */
     private $routes;
 
-    /**
-     * @var Time
-     */
-    public $time;
-    /**
-     * @var Location
-     */
-    public $location;
-    /**
-     * @var Earth
-     */
-    public $earth;
 
     /**
      *
@@ -48,25 +36,7 @@ class App
     {
         $parser = new Parser();
         $this->config = $parser->parse(file_get_contents(__DIR__ . '/config.yml'));
-
         $this->db = new \PDO('mysql:host=' . $this->config['host'] . ';dbname=' . $this->config['dbname'], $this->config['user'], $this->config['password']);
-
-        // Todo: Will be passed in the request
-        $this->location = new Location(0, 0);
-        $this->time = new Time();
-
-        $statement = $this->db->prepare("SELECT * FROM planets WHERE `name` = 'Earth' LIMIT 1");
-        $statement->execute();
-        $statement->setFetchMode(\PDO::FETCH_CLASS, "\\StarAtlas\\Models\\Earth", array($this->time, $this->location));
-        $this->earth = $statement->fetch();
-    }
-
-    /**
-     * @return \PDO
-     */
-    public function getDbConnection()
-    {
-        return $this->db;
     }
 
     /**
@@ -108,9 +78,10 @@ class App
     {
         foreach ($this->routes as $pattern => $function) {
             if (preg_match($pattern, $requestUri, $params)) {
-                $controller = new Controller($this);
+                $controller = new Controller(new Request($GLOBALS), $this->db);
                 array_shift($params);
-                return call_user_func_array(array($controller, $function . 'Action'), array_values($params));
+                $response = call_user_func_array(array($controller, $function . 'Action'), array_values($params));
+                $response->send();
             }
         }
         return false;

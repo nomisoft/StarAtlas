@@ -286,6 +286,8 @@ class Moon extends CelestialObject
      */
     public function jsonSerialize()
     {
-        return array();
+        return array(
+            'epoch_longitude' => $this->getEpochLongitude(),
+        );
     }
 }

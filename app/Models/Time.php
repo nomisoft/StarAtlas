@@ -19,6 +19,60 @@ class Time extends \DateTime
     }
 
     /**
+     * @param $year
+     * @return \DateTime
+     */
+    public function setYear($year)
+    {
+        return $this->setDate($year, $this->getMonth(), $this->getDay());
+    }
+
+    /**
+     * @param $month
+     * @return \DateTime
+     */
+    public function setMonth($month)
+    {
+        return $this->setDate($this->getYear(), $month, $this->getDay());
+    }
+
+    /**
+     * @param $day
+     * @return \DateTime
+     */
+    public function setDay($day)
+    {
+        return $this->setDate($this->getYear(), $this->getMonth(), $day);
+    }
+
+    /**
+     * @param $hour
+     * @return \DateTime
+     */
+    public function setHour($hour)
+    {
+        return $this->setTime($hour, $this->getMinute(), $this->getSecond());
+    }
+
+    /**
+     * @param $minute
+     * @return \DateTime
+     */
+    public function setMinute($minute)
+    {
+        return $this->setTime($this->getHour(), $minute, $this->getSecond());
+    }
+
+    /**
+     * @param $second
+     * @return \DateTime
+     */
+    public function setSecond($second)
+    {
+        return $this->setTime($this->getHour(), $this->getMinute(), $second);
+    }
+
+    /**
      * @return string
      */
     public function getYear()
