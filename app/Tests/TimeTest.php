@@ -9,6 +9,49 @@ class TimeTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
+     * @dataProvider providerTestGetYear
+     */
+    public function testGetYear($datetime, $expected)
+    {
+        $time = new Time($datetime);
+        $this->assertEquals($expected, $time->getYear());
+    }
+
+    public function providerTestGetYear()
+    {
+        return array(
+            array("2016-03-01 15:38:14", 2016),
+            array("1987-04-10 00:00:00", 1987),
+            array("1600-12-31 00:00:00", 1600),
+            array("837-04-10 12:00:00",  837),
+            array("-1001-08-17 21:36:00", -1001),
+            array("-4712-01-01 12:00:00", -4712)
+        );
+    }
+
+    /**
+     * @dataProvider providerTestSetYear
+     */
+    public function testSetYear($year)
+    {
+        $time = new Time();
+        $time->setYear($year);
+        $this->assertEquals($year, $time->getYear());
+    }
+
+    public function providerTestSetYear()
+    {
+        return array(
+            array(2016),
+            array(1987),
+            array(1600),
+            array(837),
+            array(-1001),
+            array(-4712)
+        );
+    }
+
+    /**
      * @dataProvider providerTestGetJulianTime
      */
     public function testGetJulianTime($datetime, $expected)

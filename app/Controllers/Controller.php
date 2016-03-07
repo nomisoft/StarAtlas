@@ -40,7 +40,6 @@ class Controller
      */
     public function __construct(Request $request, $db)
     {
-        var_dump($request);
         $this->db = $db;
         $this->setLocation($request);
         $this->setTime($request);
