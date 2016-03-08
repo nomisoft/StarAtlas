@@ -43,6 +43,22 @@ class Moon extends CelestialObject
     protected $parallax = 0.9507;
 
     /**
+     * @var Sun
+     */
+    protected $sun;
+
+    /**
+     * @param Time $time
+     * @param Location $location
+     * @param Sun $sun
+     */
+    public function __construct(Time $time, Location $location, Sun $sun)
+    {
+        parent::__construct($time, $location);
+        $this->sun = $sun;
+    }
+
+    /**
      * @param float $epochLongitude
      */
     public function setEpochLongitude($epochLongitude)
@@ -175,9 +191,9 @@ class Moon extends CelestialObject
      */
     protected function getJulianDays()
     {
-        $jd1990 = gregoriantojd(1, 1, 1990) - 0.5;
+        $julianDate1990 = gregoriantojd(1, 1, 1990) - 0.5;
         $julianDate = $this->time->getJulianTime();
-        $days = $julianDate - $jd1990 + 1;
+        $days = $julianDate - $julianDate1990 + 1;
         return $days;
     }
 
@@ -216,6 +232,7 @@ class Moon extends CelestialObject
      */
     public function getEclipticalLatitude()
     {
+        // Todo: rename variables
         list($l2, $n1) = $this->getEclipticalData();
         return rad2deg(asin(sin(deg2rad($l2 - $n1)) * sin(deg2rad($this->inclination))));
     }
@@ -225,6 +242,7 @@ class Moon extends CelestialObject
      */
     public function getEclipticalLongitude()
     {
+        // Todo: rename variables
         list($l2, $n1) = $this->getEclipticalData();
         return rad2deg(atan2(sin(deg2rad($l2 - $n1)) * cos(deg2rad($this->inclination)), cos(deg2rad($l2 - $n1)))) + $n1;
     }
@@ -234,9 +252,10 @@ class Moon extends CelestialObject
      */
     protected function getEclipticalData()
     {
-        $sunLong = $this->sun->getEclipticalLongitude();
+        // Todo: rename variables
+        $sunLongitude = $this->sun->getEclipticalLongitude();
         $sunMeanAnomaly = $this->sun->getMeanAnomaly();
-        $c = $this->getOrbitalLongitude() - $sunLong;
+        $c = $this->getOrbitalLongitude() - $sunLongitude;
         $ev = 1.2739 * sin(deg2rad(2 * $c - $this->getMeanAnomaly()));
         $ae = 0.1858 * sin(deg2rad($sunMeanAnomaly));
         $a3 = 0.37 * sin(deg2rad($sunMeanAnomaly));
@@ -244,7 +263,7 @@ class Moon extends CelestialObject
         $ec = 6.2886 * sin(deg2rad($correctedMeanAnomaly));
         $a4 = 0.214 * sin(deg2rad(2 * $correctedMeanAnomaly));
         $l1 = $this->getOrbitalLongitude() + $ev + $ec - $ae + $a4;
-        $v = 0.6583 * sin(deg2rad(2 * ($l1 - $sunLong)));
+        $v = 0.6583 * sin(deg2rad(2 * ($l1 - $sunLongitude)));
         $l2 = $l1 + $v;
         $n1 = $this->getAscendingNodeLongitude() - (0.16 * sin(deg2rad($sunMeanAnomaly)));
         return array($l2, $n1);
@@ -264,8 +283,8 @@ class Moon extends CelestialObject
      */
     public function getDeclination()
     {
-        $epochLong = deg2rad(23.440527);
-        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLong) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLong) * sin(deg2rad($this->getEclipticalLongitude()))));
+        $epochLongitude = deg2rad(23.440527);
+        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLongitude) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude) * sin(deg2rad($this->getEclipticalLongitude()))));
     }
 
     /**
@@ -273,8 +292,8 @@ class Moon extends CelestialObject
      */
     public function getRightAscension()
     {
-        $epochLong = deg2rad(23.440527);
-        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLong) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLong);
+        $epochLongitude = deg2rad(23.440527);
+        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLongitude) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude);
         $x = cos(deg2rad($this->getEclipticalLongitude()));
         $rightAscension = rad2deg(atan2($y, $x));
         $rightAscension = $this->bringWithinRange($rightAscension, 360);
@@ -287,7 +306,25 @@ class Moon extends CelestialObject
     public function jsonSerialize()
     {
         return array(
+            'altitude' => $this->getAltitude(),
+            'angular_size' => $this->getAngularSize(),
+            'ascending_node_longitude' => $this->getAscendingNodeLongitude(),
+            'azimuth' => $this->getAzimuth(),
+            'declination' => $this->getDeclination(),
+            'eccentricity' => $this->getEccentricity(),
+            'ecliptical_latitude' => $this->getEclipticalLatitude(),
+            'ecliptical_longitude' => $this->getEclipticalLongitude(),
             'epoch_longitude' => $this->getEpochLongitude(),
+            'hour_angle' => $this->getHourAngle(),
+            'inclination' => $this->getInclination(),
+            'mean_anomaly' => $this->getMeanAnomaly(),
+            'node_longitude' => $this->getNodeLongitude(),
+            'orbital_longitude' => $this->getOrbitalLongitude(),
+            'parallax' => $this->getParallax(),
+            'perigee_longitude' => $this->getPerigeeLongitude(),
+            'phase' => $this->getPhase(),
+            'right_ascension' => $this->getRightAscension(),
+            'semi_major_axis' => $this->getSemiMajorAxis(),
         );
     }
 }

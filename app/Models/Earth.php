@@ -53,4 +53,45 @@ class Earth extends Planet
      * @var float
      */
     protected $magnitude1au = 0.0;
+
+    /**
+     * @return float
+     */
+    public function getEclipticalLongitude()
+    {
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEclipticalLatitude()
+    {
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEarthDistance()
+    {
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAngularSeparation()
+    {
+        return 0;
+    }
+
+    /**
+     * @return float
+     */
+    public function getApparentMagnitude()
+    {
+        return 0;
+    }
+
 }

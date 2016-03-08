@@ -116,9 +116,10 @@ class Sun extends CelestialObject
      */
     public function getMeanAnomaly()
     {
-        $jd1990 = gregoriantojd(1, 1, 1990) - 0.5;
+        $julianDate1990 = gregoriantojd(1, 1, 1990) - 0.5;
         $julianDate = $this->time->getJulianTime();
-        $days = $julianDate - $jd1990 + 1;
+        $days = $julianDate - $julianDate1990 + 1;
+        // Todo: rename variable
         $n = (360 / 365.242191) * $days;
         $n = $this->bringWithinRange($n, 360);
         $meanAnomaly = $n + $this->getEpochLongitude() - $this->getPerigeeLongitude();
@@ -157,8 +158,8 @@ class Sun extends CelestialObject
      */
     public function getDeclination()
     {
-        $epochLong = deg2rad(23.440527);
-        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLong) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLong) * sin(deg2rad($this->getEclipticalLongitude()))));
+        $epochLongitude = deg2rad(23.440527);
+        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLongitude) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude) * sin(deg2rad($this->getEclipticalLongitude()))));
     }
 
     /**
@@ -166,8 +167,8 @@ class Sun extends CelestialObject
      */
     public function getRightAscension()
     {
-        $epochLong = deg2rad(23.440527);
-        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLong) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLong);
+        $epochLongitude = deg2rad(23.440527);
+        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLongitude) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude);
         $x = cos(deg2rad($this->getEclipticalLongitude()));
         $rightAscension = rad2deg(atan2($y, $x));
         $rightAscension = $this->bringWithinRange($rightAscension, 360);
@@ -180,7 +181,20 @@ class Sun extends CelestialObject
     public function jsonSerialize()
     {
         return array(
-            'epoch_longitude' => $this->getEpochLongitude()
+            'altitude' => $this->getAltitude(),
+            'angular_diameter' => $this->getAngularDiameter(),
+            'azimuth' => $this->getAzimuth(),
+            'declination' => $this->getDeclination(),
+            'eccentricity' => $this->getEccentricity(),
+            'ecliptical_latitude' => $this->getEclipticalLatitude(),
+            'ecliptical_longitude' => $this->getEclipticalLongitude(),
+            'epoch_longitude' => $this->getEpochLongitude(),
+            'hour_angle' => $this->getHourAngle(),
+            'mean_anomaly' => $this->getMeanAnomaly(),
+            'perigee_longitude' => $this->getPerigeeLongitude(),
+            'right_ascension' => $this->getRightAscension(),
+            'semi_major_axis' => $this->getSemiMajorAxis(),
+            'true_anomaly' => $this->getTrueAnomaly(),
         );
     }
 }

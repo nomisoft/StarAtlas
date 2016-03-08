@@ -158,9 +158,14 @@ class Star extends CelestialObject
         return array(
             'catalogue_number' => $this->getCatalogueNumber(),
             'name' => $this->getName(),
-            'distance' => $this->getDistance(),
             'altitude' => $this->getAltitude(),
-            'azimuth' => $this->getAzimuth()
+            'apparent_magnitude' => $this->getApparentMagnitude(),
+            'azimuth' => $this->getAzimuth(),
+            'bv' => $this->getBV(),
+            'declination' => $this->getDeclination(),
+            'distance' => $this->getDistance(),
+            'hour_angle' => $this->getHourAngle(),
+            'right_ascension' => $this->getRightAscension()
         );
     }
 }

@@ -54,6 +54,22 @@ class Planet extends CelestialObject
     protected $magnitude1au;
 
     /**
+     * @var Earth
+     */
+    protected $earth;
+
+    /**
+     * @param Time $time
+     * @param Location $location
+     * @param Earth $earth
+     */
+    public function __construct(Time $time, Location $location, Earth $earth = null)
+    {
+        parent::__construct($time, $location);
+        $this->earth = $earth;
+    }
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -235,10 +251,10 @@ class Planet extends CelestialObject
      */
     public function getNp()
     {
-        $jd1990 = gregoriantojd(1, 1, 1990) - 0.5;
-        $jd = $this->time->getJulianTime();
-        $d = $jd - $jd1990 + 1;
-        $np = (360 / 365.242191) * ($d / $this->getPeriod());
+        $julianDate1990 = gregoriantojd(1, 1, 1990) - 0.5;
+        $julianDate = $this->time->getJulianTime();
+        $days = $julianDate - $julianDate1990 + 1;
+        $np = (360 / 365.242191) * ($days / $this->getPeriod());
         $np = $this->bringWithinRange($np, 360);
         return $np;
     }
@@ -393,8 +409,8 @@ class Planet extends CelestialObject
      */
     public function getDeclination()
     {
-        $epochLong = deg2rad(23.440527);
-        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLong) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLong) * sin(deg2rad($this->getEclipticalLongitude()))));
+        $epochLongitude = deg2rad(23.440527);
+        return rad2deg(asin(sin(deg2rad($this->getEclipticalLatitude())) * cos($epochLongitude) + cos(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude) * sin(deg2rad($this->getEclipticalLongitude()))));
     }
 
     /**
@@ -402,8 +418,8 @@ class Planet extends CelestialObject
      */
     public function getRightAscension()
     {
-        $epochLong = deg2rad(23.440527);
-        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLong) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLong);
+        $epochLongitude = deg2rad(23.440527);
+        $y = sin(deg2rad($this->getEclipticalLongitude())) * cos($epochLongitude) - tan(deg2rad($this->getEclipticalLatitude())) * sin($epochLongitude);
         $x = cos(deg2rad($this->getEclipticalLongitude()));
         $rightAscension = rad2deg(atan2($y, $x));
         $rightAscension = $this->bringWithinRange($rightAscension, 360);
@@ -418,9 +434,34 @@ class Planet extends CelestialObject
         return array(
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'period' => $this->getPeriod(),
+            'altitude' => $this->getAltitude(),
+            'angular_diameter_1au' => $this->getAngularDiameter1Au(),
+            'angular_separation' => $this->getAngularSeparation(),
+            'apparent_magnitude' => $this->getApparentMagnitude(),
+            'ascending_node_longitude' => $this->getAscendingNodeLongitude(),
+            'azimuth' => $this->getAzimuth(),
+            'declination' => $this->getDeclination(),
+            'earth_distance' => $this->getEarthDistance(),
+            'eccentricity' => $this->getEccentricity(),
+            'ecliptical_latitude' => $this->getEclipticalLatitude(),
+            'ecliptical_longitude' => $this->getEclipticalLongitude(),
             'epoch_longitude' => $this->getEpochLongitude(),
+            'heliocentric_latitude' => $this->getHeliocentricLatitude(),
+            'heliocentric_longitude' => $this->getHeliocentricLongitude(),
+            'hour_angle' => $this->getHourAngle(),
+            'inclination' => $this->getInclination(),
+            'light_time' => $this->getLightTime(),
+            'magnitude_1au' => $this->getMagnitude1au(),
             'mean_anomaly' => $this->getMeanAnomaly(),
+            'perihelion_longitude' => $this->getPerihelionLongitude(),
+            'period' => $this->getPeriod(),
+            'phase' => $this->getPhase(),
+            'projected_heliocentric_longitude' => $this->getProjectedHeliocentricLongitude(),
+            'projected_radius_vector' => $this->getProjectedRadiusVector(),
+            'right_ascension' => $this->getRightAscension(),
+            'semi_major_axis' => $this->getSemiMajorAxis(),
+            'sun_distance' => $this->getSunDistance(),
+            'variation' => $this->getVariation(),
         );
     }
 }
