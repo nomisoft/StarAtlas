@@ -24,6 +24,9 @@ class Time extends \DateTime
      */
     public function setYear($year)
     {
+        if (!is_numeric($year)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setDate($year, $this->getMonth(), $this->getDay());
     }
 
@@ -33,6 +36,9 @@ class Time extends \DateTime
      */
     public function setMonth($month)
     {
+        if (!is_numeric($month)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setDate($this->getYear(), $month, $this->getDay());
     }
 
@@ -42,6 +48,9 @@ class Time extends \DateTime
      */
     public function setDay($day)
     {
+        if (!is_numeric($day)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setDate($this->getYear(), $this->getMonth(), $day);
     }
 
@@ -51,6 +60,9 @@ class Time extends \DateTime
      */
     public function setHour($hour)
     {
+        if (!is_numeric($hour)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setTime($hour, $this->getMinute(), $this->getSecond());
     }
 
@@ -60,6 +72,9 @@ class Time extends \DateTime
      */
     public function setMinute($minute)
     {
+        if (!is_numeric($minute)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setTime($this->getHour(), $minute, $this->getSecond());
     }
 
@@ -69,6 +84,9 @@ class Time extends \DateTime
      */
     public function setSecond($second)
     {
+        if (!is_numeric($second)) {
+            throw new \InvalidArgumentException;
+        }
         return $this->setTime($this->getHour(), $this->getMinute(), $second);
     }
 
