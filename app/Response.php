@@ -23,8 +23,16 @@ class Response
         $this->body = $body;
     }
 
+    public function getBody()
+    {
+        return $this->body;
+    }
+
     public function setStatusCode($statusCode)
     {
+        if (!is_numeric($statusCode)) {
+            throw new \InvalidArgumentException;
+        }
         $this->statusCode = $statusCode;
     }
 
