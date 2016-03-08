@@ -33,6 +33,10 @@ class Controller
      * @var Earth
      */
     public $earth;
+    /**
+     * @var Sun
+     */
+    public $sun;
 
     /**
      * @param Request $request
@@ -44,6 +48,7 @@ class Controller
         $this->setLocation($request);
         $this->setTime($request);
         $this->setEarth();
+        $this->setSun();
     }
 
     private function setLocation(Request $request)
@@ -84,6 +89,10 @@ class Controller
         $this->earth = $statement->fetch();
     }
 
+    private function setSun() {
+        $this->sun = new Sun($this->time,$this->location);
+    }
+
     /**
      * @return Response
      */
@@ -98,13 +107,14 @@ class Controller
      */
     public function planetsAction()
     {
-        $statement = $this->db->query("SELECT * FROM planets");
+        $statement = $this->db->query("SELECT * FROM planets WHERE `name` != 'Earth'");
         $statement->setFetchMode(
             \PDO::FETCH_CLASS,
             "\\StarAtlas\\Models\\Planet",
             array($this->time, $this->location, $this->earth)
         );
         $planets = $statement->fetchAll();
+        $planets[] = $this->earth;
         $response = new Response(json_encode($planets));
         return $response;
     }
@@ -115,6 +125,10 @@ class Controller
      */
     public function planetAction($planet)
     {
+        if ($planet == 'Earth') {
+            $response = new Response(json_encode($this->earth));
+            return $response;
+        }
         $statement = $this->db->prepare("SELECT * FROM planets WHERE name = :planet LIMIT 1");
         $statement->bindParam(':planet', $planet, \PDO::PARAM_STR);
         $statement->execute();
@@ -169,7 +183,7 @@ class Controller
      */
     public function moonAction()
     {
-        $moon = new Moon($this->time, $this->location, $this->earth);
+        $moon = new Moon($this->time, $this->location, $this->sun);
         $response = new Response(json_encode($moon));
         return $response;
     }
